@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>New quiz</title>
+    <!--<link rel="stylesheet" href="css/quiz.css">-->
+    <style>
+
+        .container-quiz {
+            max-width: 800px;
+        }
+
+    </style>
+</head>
+<body th:style="'background: url(/img/sky.jpg) no-repeat center center fixed;'">
+
+
+<div class="container-fluid">
+    <!--TODO: Ewentualnie dodać navbar: do listy stworzonych quizów, do main page-->
+    <div class="d-flex flex-row-reverse">
+        <a href="/">
+            <button class="btn btn-secondary">Back to main page</button>
+        </a>
+    </div>
+</div>
+<div class="container-fluid container-quiz">
+    <!--TODO: Add form connect with thymeleaf's base-->
+    <div class="card-deck mb-3 text-center" style="opacity: 85%">
+        <div class="card">
+            <div class="card-header">
+                <h1>Welcome in quiz creator</h1>
+            </div>
+            <form th:action="@{/playQuiz/{id}(id=${quiz.id})}" th:object="${quiz}" method="post">
+                <div class="card-body mb-3 text-left">
+                    <div class="col-sm-6 mb-3">
+                        <div class=" col-sm-6 row">
+                            <p class="mr-2">Current quiz: </p>
+                            <b th:text="${quiz.name}"></b>
+                        </div>
+                        <p>How many questions do you want to practice?</p>
+                        <select th:name="numberOfQuestions" class="custom-select">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="all">All</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4 mb-5 offset-8">
+                        <button type="submit" class="btn btn-success pull-right">Start quiz</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+</html>

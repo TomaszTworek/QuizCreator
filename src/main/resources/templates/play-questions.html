@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>New quiz</title>
+    <!--<link rel="stylesheet" href="css/quiz.css">-->
+    <style>
+
+        .container-quiz {
+            max-width: 800px;
+        }
+
+        .my-margin {
+            position: relative;
+        }
+
+        .my-card {
+            margin-top: 150px;
+        }
+
+        .custom-control-lg .custom-control-label::before,
+        .custom-control-lg .custom-control-label::after {
+            top: 0.1rem !important;
+            left: -2rem !important;
+            width: 1.25rem !important;
+            height: 1.25rem !important;
+        }
+
+        .custom-control-lg .custom-control-label {
+            margin-left: 0.5rem !important;
+            font-size: 1rem !important;
+        }
+
+        .question-content {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body th:style="'background: url(/img/sky.jpg) no-repeat center center fixed;'">
+
+<form method="post" th:action="@{/submitQuiz}" th:object="${userAnswers}">
+    <div class="container-fluid container-quiz my-margin">
+        <div th:each="question, iterStat: ${questions}">
+            <div class="card-deck mb-3 text-center" style="opacity: 85%">
+                <div class="card my-card">
+                    <div class="card-header text-center">
+                        <!-- TODO: Add number of current question and counter in right top i.e 3/10 -> 4/10-->
+                        <h1 th:text="'Question ' + ${iterStat.index + 1}"></h1>
+                    </div>
+                    <div class="card-body mb-3 text-left">
+                        <div class="col-sm-6 mb-3">
+                            <!--TODO: Content of question and checkboxes -->
+                            <p class="question-content" th:text="'Question: ' + ${question.content}"></p>
+                            <div th:each="answer,itemStat: ${question.answers}">
+                                <div class="row ml-1 mb-3 custom-control-lg custom-control custom-checkbox">
+                                    <input th:id="defaultUnchecked + ${iterStat.index} + ${itemStat.index}"
+                                           th:field="*{userAnswers}"
+                                           type="checkbox" th:value="${answer.id}"
+                                           class="custom-control-input">
+                                    <label th:for="defaultUnchecked + ${iterStat.index} + ${itemStat.index}"
+                                           th:text="${answer.content}"
+                                           class="custom-control-label"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="col-sm-4 mb-5 offset-8">
+                            &lt;!&ndash; TODO: Previous,next buttons? &ndash;&gt;
+                            <button class="btn btn-success pull-right">Next</button>
+                        </div>-->
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <button class="btn btn-success mb-5 mr-5 pull-right" type="submit">Check your answers</button>
+</form>
+
+
+</body>
+</html>

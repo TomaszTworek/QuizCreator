@@ -1,0 +1,16 @@
+body, html {
+    height: 100%;
+}
+
+.background-quiz-image{
+    /* The image used */
+    background-image: url("img/sky2.jpg");
+
+    /* Full height */
+    height: 100%;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}

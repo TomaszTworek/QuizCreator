@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>New quiz</title>
+    <!--<link rel="stylesheet" href="css/quiz.css">-->
+    <style>
+        body {
+            height: 100%;
+            background-image: url("img/cat-quiz.jpg");
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+
+        .container-quiz {
+            max-width: 1200px;
+        }
+
+        .textarea-question-add {
+            max-height: 300px;
+        }
+
+    </style>
+</head>
+<body id="page-top">
+
+
+<div class="container-fluid">
+
+    <!--TODO: Ewentualnie dodać navbar: do listy stworzonych quizów, do main page-->
+    <div class="d-flex flex-row-reverse">
+        <a href="/">
+            <button class="btn btn-secondary">Back to main page</button>
+        </a>
+    </div>
+</div>
+<div class="container-fluid container-quiz">
+    <!--TODO: Add form connect with thymeleaf's base-->
+    <div class="card-deck mb-3 text-center" style="opacity: 95%">
+        <div class="card">
+            <div class="card-header">
+                <h1>Welcome in quiz creator</h1>
+            </div>
+            <div class="card-body mb-3 text-left">
+                <!-- CREATING QUESTIONS-->
+                <form autocomplete="on" method="post" th:action="@{/addQuestionViaQuiz}"
+                      th:object="${newQuestionForCurrentQuiz}">
+                    <div class="col-md-6 mb-2">
+                        <label for="questionContent">Add question</label>
+                        <textarea th:field="*{content}" class="form-control textarea-question-add"
+                                  id="questionContent" name="question_content" required></textarea>
+                    </div>
+                    <div class="form-row col-md-12 mb-3">
+                        <div th:each="answer,itemStat: *{answers}" class="col-md-3">
+                            <label for="answer">Add answer:</label>
+                            <input th:field="*{answers[__${itemStat.index}__].content}" type="text"
+                                   class="form-control"
+                                   id="answer" name="answer" required>
+                            <div class="row ml-1 mb-3 custom-control custom-checkbox">
+                                <input th:field="*{answers[__${itemStat.index}__].correct}"
+                                       type="checkbox" class="custom-control-input"
+                                       th:id="defaultUnchecked + ${itemStat.index}">
+                                <label class="custom-control-label"
+                                       th:for="defaultUnchecked + ${itemStat.index}">Check if answer is correct
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ADD QUESTION BUTTON -->
+                    <div class="col-md-6 mb-2">
+                        <input class="btn btn-secondary" type="submit"
+                               value="Add question"/>
+                    </div>
+
+                </form>
+                <!-- CREATE QUIZ -->
+                <form autocomplete="on" method="POST" th:action="@{/addQuiz}" th:object="${newQuiz}">
+                    <div class="col-md-6 mb-2">
+                        <label for="name">Name your quiz</label>
+                        <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                    </div>
+
+                    <div class="col-md-2 mb-2 float-right">
+                        <input class="btn btn-primary" type="submit" value="Create your quiz">
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <!-- DISPLAY QUESTION -->
+    <div class="container-fluid" style="opacity: 95%;">
+        <div class="row mx-auto">
+            <div class="col-sm-12 col-md-6 col-lg-4 mb-2 " th:each="question: ${currentQuizQuestions}">
+                <div class="card d-flex">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm-9 col-md-7 col-lg-6 col-xl-7  text-center mx-auto">
+                                <p th:text="${question.content}"></p>
+                            </div>
+                            <div class="col-sm-3 col-md-5 col-lg-6 col-xl-5 pull-right">
+                                <form method="post" th:action="@{/modifyQuestion}"
+                                      th:object="${newQuestionForCurrentQuiz}">
+                                    <button class="btn btn-secondary " type="submit" name="action" value="edit">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-secondary" type="submit" name="action"
+                                            value="delete">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body text-center">
+                        <div th:each="answer: *{question.answers}">
+                            <p class="btn-secondary" th:text="${answer.content} + '.  Is correct: ' + ${answer.correct}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+</html>
