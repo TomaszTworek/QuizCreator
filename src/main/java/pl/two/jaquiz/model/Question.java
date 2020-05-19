@@ -1,11 +1,17 @@
 package pl.two.jaquiz.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.*;
 
 @Entity
-public class Question {
+@Data
+@NoArgsConstructor
+public class Question implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,82 +23,17 @@ public class Question {
 
     private LocalDate createdAt;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,orphanRemoval = true)
+    @ManyToOne
+    @JoinColumn(name = "quiz_id")
+    private Quiz quiz;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "question")
     private List<Answer> answers = new ArrayList<>(4);
 
-    @Override
-    public String toString() {
-        return "Question{" +
-                "id=" + id +
-                ", questionType=" + questionType +
-                ", content='" + content + '\'' +
-                ", createdAt=" + createdAt +
-                ", answers=" + answers +
-                '}';
-    }
-
-    public Question() {
-        for (int i = 0; i < 4; i++) {
-            answers.add(new Answer());
-        }
-    }
-
-
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public QuestionType getQuestionType() {
-        return questionType;
-    }
-
-    public void setQuestionType(QuestionType questionType) {
-        this.questionType = questionType;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
+    public Question(String content, QuestionType questionType, LocalDate createdAt, List<Answer> answerList) {
         this.content = content;
-    }
-
-    public LocalDate getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDate createdAt) {
+        this.questionType = questionType;
         this.createdAt = createdAt;
+        this.answers = answerList;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Question question = (Question) o;
-        return Objects.equals(id, question.id) &&
-                questionType == question.questionType &&
-                Objects.equals(content, question.content) &&
-                Objects.equals(createdAt, question.createdAt);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, questionType, content, createdAt);
-    }
-
-
 }

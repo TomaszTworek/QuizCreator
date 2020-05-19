@@ -37,6 +37,8 @@ public class QuestionController {
         return "redirect:/questions";
     }
 
+
+
     @RequestMapping(method = RequestMethod.POST ,value = "/modifyQuestion",params = "action=edit")
     public String editQuestion(@ModelAttribute Question question){
         System.out.println("EDIT CONTROLLER");

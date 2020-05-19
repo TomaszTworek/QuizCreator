@@ -1,5 +1,6 @@
 package pl.two.jaquiz.controller;
 
+import org.dom4j.rule.Mode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
